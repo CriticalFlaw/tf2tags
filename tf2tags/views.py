@@ -154,7 +154,7 @@ def login(request):
         # Check the response is valid
         new_params = request.GET.copy()
         new_params["openid.mode"] = "check_authentication"
-        resp = urllib.request.urlopen("https://steamcommunity.com/openid/login"+"?"+new_params.urlencode())
+        resp = urllib.urlopen("https://steamcommunity.com/openid/login"+"?"+new_params.urlencode())
         body = resp.read().decode("utf-8")
         if "is_valid:true" not in body:
             return redirect("/error/login")
@@ -168,7 +168,7 @@ def login(request):
 
     #Get public info
     try:
-        data["info"] = json.loads(urllib.request.urlopen(data["url"]).read().decode("utf-8"))["response"]["players"][0]
+        data["info"] = json.loads(urllib.urlopen(data["url"]).read().decode("utf-8"))["response"]["players"][0]
     except:
         error_log = "==========\n"
         error_log += str(datetime.now()) + "\n"
@@ -178,7 +178,7 @@ def login(request):
         except:
             error_log + "Can't parse url " + data["url"] + "\n"
 
-        output = open("/var/projects/tf2tags.com/assets/data/login_errors.log", "w")
+        output = open("/var/www/html/tf2tags/assets/data/login_errors.log", "w")
         output.write(error_log)
         output.close()
         return redirect("/error/login")
@@ -442,7 +442,7 @@ def streak_search(request):
         data["results"] = []
         return render_to_response('streak_search.html', data, context_instance=RequestContext(request))
 
-    market_data = json.loads(open("/var/projects/tf2tags.com/assets/data/streak_search.json").read())
+    market_data = json.loads(open("/var/www/html/tf2tags/assets/data/streak_search.json").read())
 
     # Process results
     results = []

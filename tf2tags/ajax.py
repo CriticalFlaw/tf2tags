@@ -150,7 +150,7 @@ def vote(request, item=None, vote=None):
     """
 
     try:
-        with open("/var/projects/tf2tags/votes.log", "a") as votelog:
+        with open("/var/www/html/tf2tags/votes.log", "a") as votelog:
             if user == None:
                 votelog.write("Vote by non logged in user Item #"+str(item)+" IP: "+str(ip)+" Vote " + str(vote) + " TIME: " + str(datetime.now()) + "\n")
             else:

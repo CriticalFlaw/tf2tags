@@ -22,24 +22,19 @@ import tf2tags.tf2 as tf2
 import hmac
 import hashlib
 import base64
-import urllib.request
+import urllib
 
-ADMINS      = ["76561197995251793", "76561198150261397"] #dr_dos0016
-ADS         = True #Adsense
-TRACKING    = True #Analytics
+ADMINS      = ["76561198041892999"] #criticalflaw
+ADS         = False #Adsense
+TRACKING    = False #Analytics
+SPYCHECK    = False #Anonymous submissions
 
-# I'd rather not put a bunch of slurs in a repo with my name, so here's a more
-# complicated setup.
-REV_SLURS       = ["reggin", "sreggin", "toggaf", "stoggaf", "gaf", "sgaf", "tnuc", "stnuc", "hctib", "sehctib", "regg1n", "sregg1n", "t0ggaf", "st0ggaf"]
+# Setup the slur filter.
+REV_SLURS   = ["reggin", "sreggin", "toggaf", "stoggaf", "gaf", "sgaf", "tnuc", "stnuc", "hctib", "sehctib", "regg1n", "sregg1n", "t0ggaf", "st0ggaf"]
 SLURS = []
 for slur in REV_SLURS:
     SLURS.append(slur[::-1])
-SPYCHECK    = False # Disable anon submissions
 tf = tf2.TF()
 
-ROOT        = "/var/projects/tf2tags/"
-
-if os.path.isfile("/var/projects/DEV"):
-    URL = "http://django.pi:8000/"
-else:
-    URL = "http://tf2tags.com/"
+ROOT	= "/var/www/html/tf2tags/"
+URL 	= "0.0.0.0:8000/"	# "http://tf2tags.com/"

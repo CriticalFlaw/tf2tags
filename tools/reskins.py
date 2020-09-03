@@ -13,7 +13,7 @@ try:
 except:
     print "PIL NOT FOUND"
 
-sys.path.append("/var/projects/tf2tags")
+sys.path.append("/var/www/html/tf2tags")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tags.settings")
 django.setup()
 from schema.models import *

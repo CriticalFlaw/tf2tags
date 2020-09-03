@@ -7,7 +7,7 @@ This script will recalculate scores after votes have been deleted.
 """
 
 import django, os, sys
-sys.path.append("/var/projects/tf2tags")
+sys.path.append("/var/www/html/tf2tags")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tags.settings")
 django.setup()
 from tf2tags.models import Votes, Submissions
