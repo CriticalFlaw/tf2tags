@@ -4,21 +4,21 @@
 
 {% block scripts %}
 {% if set_cookie %}
-<script type="text/javascript">
-    function set_cookie(name,value,days) {
-        if (days)
-        {
-            var date = new Date();
-            date.setTime(date.getTime()+(days*24*60*60*1000));
-            var expires = "; expires="+date.toGMTString();
-        }
-        else
-            var expires = "";
-        document.cookie = name+"="+value+expires+"; path=/";
-    }
-    
-    set_cookie("latest_news", "{{news.timestamp|date:"Y-m-d"}}", 360);
-</script>
+	<script type="text/javascript">
+	function set_cookie(name,value,days) {
+		if (days)
+		{
+			var date = new Date();
+			date.setTime(date.getTime()+(days*24*60*60*1000));
+			var expires = "; expires="+date.toGMTString();
+		}
+		else
+			var expires = "";
+		document.cookie = name+"="+value+expires+"; path=/";
+	}
+		
+	set_cookie("latest_news", "{{news.timestamp|date:"Y-m-d"}}", 360);
+	</script>
 {% endif %}
 {% endblock %}
 
@@ -37,11 +37,13 @@
             {{news.text|safe}}
         </div>
     </div>
+	<br>
     
     <div style="text-align:center">
         <a href="/news_archive">
-        <img src="/assets/images/intel.png"><br>
-        News Archive</a>
+			<img src="/assets/images/intel.png">
+			<br>News Archive
+		</a>
     </div>
 </div>
 {% endblock %}

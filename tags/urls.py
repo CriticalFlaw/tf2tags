@@ -63,11 +63,9 @@ urlpatterns = [
     url(r'^winners/(?P<year>[0-9]+)$', tf2tags.views.winners),
     url(r'^winners$', tf2tags.views.winners),
 
-
     #Misc
     url(r'^item-data$', tf2tags.views.generic, {"template":"data.html", "title":" - Item Data"}),
     url(r'^images/(?P<item>[0-9]+)$', tf2tags.views.images),
-
 
     #AJAX
     url(r'^ajax/getItems$', tf2tags.views.getItems),
@@ -89,6 +87,5 @@ urlpatterns = [
     url(r'^admin/user_management', tf2tags.views.user_management),
     url(r'^admin/flagged', tf2tags.views.flagged),
     url(r'^admin$', tf2tags.views.admin),
-
     url(r'^test$', tf2tags.views.test),
 ]
