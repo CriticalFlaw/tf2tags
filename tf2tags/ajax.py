@@ -2,7 +2,6 @@
 from .other import *
 from datetime import datetime, timedelta
 from schema.models import *
-from tf2tags.tf2 import APRIL
 
 #AJAX Related
 def getAttributes(request, defindex=None):
@@ -21,14 +20,6 @@ def getItems(request):
     results = []
 
     qs = Item.objects.filter(item_slot=slot, used_by_classes__contains=role, nameable=True).order_by("item_name")
-
-    # APRIL FOOL'S DAY
-    if APRIL:
-        if slot == "a_tf2":
-            qs = Item.objects.filter(Q(item_slot=None) | Q(item_slot=slot, used_by_classes__contains=role)).order_by("item_name")
-        else:
-            qs = Item.objects.filter(item_slot=slot, used_by_classes__contains=role).order_by("item_name")
-    # END APRIL
 
     last_item_name = ""
     for item in qs:
@@ -60,25 +51,6 @@ def getItems(request):
     return HttpResponse(results, content_type="application/json")
 
 def getItem(request, defindex=None):
-    # APRIL FOOL'S DAY
-    if APRIL:
-        item = Item.objects.get(pk=int(defindex))
-        data = {}
-        data["defindex"]    = item.defindex
-        data["rarities"] = sorted(set(tf.rarities))
-        if int(defindex) < 0:
-            data["paintable"]   = False
-        else:
-            data["paintable"]   = item.paintable
-        data["style"]       = []
-        styles = Style.objects.filter(defindex_id=item.defindex)
-        if styles:
-            for style in styles:
-                data["style"].append(style.name)
-        results = json.dumps(data)
-        return HttpResponse(results, content_type="application/json")
-    # END APRIL
-
     item = Item.objects.get(pk=int(defindex), nameable=True)
     data = {}
     data["defindex"]    = item.defindex

@@ -1,9 +1,9 @@
-﻿{% if user.adminX %}
-<span class="tf2" name="rate-text" id="vote{{i.id}}">{{i.user.SteamID}} / {{i.ip}}</span><br>
+﻿{{identifier}} - By: {% if items.0.user.steamID == "0" %}{{items.0.fakeAuthor}}{% else %}<a href="profile/{{items.0.user.steamID}}">{{items.0.user.name}}</a>{% endif %}<br>
+{% if user.adminX %}
+<span class="tf2" name="rate-text" id="vote{{i.id}}">{{i.user.SteamID}} / {{i.ip}}</span>
 {% else %}
 <span class="tf2" name="rate-text" id="vote{{i.id}}">RATE THIS ITEM</span><br>
 {% endif %}
-By: {% if i.user.steamID != "0" %}<a href="/profile/{{i.user.steamID}}">{{i.user.name}}</a>{% else %}{{i.fakeAuthor}}{% endif %}
 <div class="vote_area">
     <div name="score" class="tf2 score" style="color:#{% if i.score >= 0 %}00FF00{% else %}FF0000{% endif %}">
         {{i.score}}<br>

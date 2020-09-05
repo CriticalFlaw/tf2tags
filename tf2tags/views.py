@@ -6,6 +6,7 @@ from .other import *
 
 import smtplib
 
+"""
 def awards(request):
     data = {}
     today = date.fromtimestamp(time.time())
@@ -20,6 +21,7 @@ def awards(request):
         else:
             data["time"] = data["time"].split(",")[0]
     return render(request, "awards.html", data)
+"""
 
 def browse(request, page=1):
     page = int(page)
@@ -64,7 +66,8 @@ def browseUser(request, steamID="0", page=1):
     data["pageList"] = range(max(1, page-3), min(page+4, data["maxPage"]+1))
 
     return render(request, "browse.html", data)
-
+    
+"""
 def contest(request, theme, page=1):
     page = int(page)
     data = {"title":" - Contest Entries"}
@@ -82,6 +85,7 @@ def contest(request, theme, page=1):
     data["pageList"] = range(max(1, page-3), min(page+4, data["maxPage"]+1))
 
     return render(request, "browse.html", data)
+"""
 
 def create(request):
     data = {'tf':tf}
@@ -164,7 +168,8 @@ def login(request):
     data["response"] = request.GET["openid.claimed_id"]
     data["id"] = request.GET["openid.claimed_id"][36:]
     # Set your Steam API key here
-    data["url"] = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=TODO&steamids="+data["id"]
+    KEY = "TODO"
+    data["url"] = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key="+KEY+"&steamids="+data["id"]
 
     #Get public info
     try:
@@ -430,11 +435,8 @@ def results(request, page=1):
 
     return render(request, "browse.html", data)
 
+"""
 def streak_search(request):
-    """ This feature has been removed """
-    return redirect("/")
-
-    """
     start = datetime.now()
     data = {}
     data["post"] = request.POST
@@ -500,7 +502,7 @@ def streak_search(request):
     data["results"] = sorted(results, key=lambda results: float(results["price"][1:]))
     data["displaying"] = len(results)
     return render_to_response('streak_search.html', data, context_instance=RequestContext(request))
-    """
+"""
 
 def submitComment(request):
     user = getUser(request.COOKIES.get("session", None))
@@ -805,6 +807,7 @@ def votes_user(request, vote_id):
     data["item"] = source.itemID
     return render(request, "votes_user.html", data)
 
+"""
 def winners(request, year=2013):
     data = {}
     #contests = Contest.objects.filter(endDate__gte=str(year)+"-01-01", endDate__lte=str(year)+"-12-31")
@@ -828,6 +831,7 @@ def winners(request, year=2013):
     data["items"] = items
 
     return render(request, "winners.html", data)
+"""
 
 def test(request, page=1):
     from django import VERSION

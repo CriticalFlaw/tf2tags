@@ -226,8 +226,10 @@ class Votes(models.Model):
         key = key[:4] + "-" + key[4:8] + "-" + key[8:]
         return key
 
+"""
 class Contest(models.Model):
     theme       = models.CharField(max_length=50)
     startDate   = models.DateField()
     endDate     = models.DateField()
     winner      = models.IntegerField(default=0)
+"""

@@ -9,15 +9,12 @@ try:
 except:
     print("tf2tags.models not found!")
 
-APRIL       = False # April Fool's Week
-
 class TF(object):
     def __init__(self):
         self.classes = ["Scout", "Soldier", "Pyro", "Demoman", "Heavy", "Engineer", "Medic", "Sniper", "Spy", "All"]
-        self.classdict = {"All":"0", "Scout":"1", "Soldier":"2", "Pyro":"3", "Demoman":"4", "Heavy":"5", "Engineer":"6", "Medic":"7", "Sniper":"8", "Spy":"9", "April":"A"}
+        self.classdict = {"All":"0", "Scout":"1", "Soldier":"2", "Pyro":"3", "Demoman":"4", "Heavy":"5", "Engineer":"6", "Medic":"7", "Sniper":"8", "Spy":"9"}
         self.botclasses = ["Scout", "Soldier", "Pyro", "Demoman", "Heavy", "Engineer", "Medic", "Sniper", "Spy"]
         self.slots = ["primary", "secondary", "melee", "pda", "pda2", "misc", "action"]
-        self.is_april = APRIL
 
         # slot4 is building in the case of the sapper, and pda in the case of the construction PDA and non-nameable disguise kit. Schema edits will make sappers PDAs.
 
@@ -93,13 +90,7 @@ class TF(object):
             "F0E68C", "2D2D24", "808000", "729E42", "424F3B", "BCDDB3", "32CD32", "2F4F4F", "839FA3", "256D8D", "384248", "5885A2", "28394D", "18233D", "D8BED8", "7D4071", "51384A",
             "FF69B4", "3B1F23", "B8383B"]
 
-        if APRIL:
-            self.april()
-
     def validate(self, item):
-        if APRIL:
-            return "SUCCESS"
-
         errors = []
 
         # Verify item exists
@@ -240,26 +231,6 @@ class TF(object):
             return "Strange"
         else:
             return self.rarities_strange[rank-1]
-
-
-    def april(self):
-        self.classes.append("April")
-        self.slots = self.slots + ["a_doom", "a_mlp", "a_poke", "a_portal", "a_regular", "a_tf2", "a_valve", "a_who", "a_april", "a_ut", "a_su"]
-        self.particles = self.particles + self.particles_special + []
-        self.rarities += self.rarities_strange
-        self.rarities += self.rarities_holiday_punch
-        self.rarities += self.rarities_mantreads
-        self.rarities += self.rarities_sapper
-        self.rarities += self.rarities_cosmetic
-        self.rarities += self.rarities_spirit_of_giving
-        self.rarities += ["Buff the", "Nerf the", "Kurt Cobain's", "Ayn Rand's", "Well-Intentioned", "Rapping", "Dr. Dos'", "Dark",
-            "Team Rocket's", "Questionable", "Ugly", "A Distinctive Lack Of", "An extraordinary Abundance Of", "Facebook's Own", "An extraordinary Lack Of",
-            "A Distinctive Abundance Of", "Underpowered", "Overpowered", "Fairly Balanced", "Fused"]
-        self.april_filters = ["Magical", "Under-Rated", "Over-Rated", "Sensual", "Mysterious", "Home-Made", "Artificial", "Glistening", "Wet", "Dry", "Spicy",
-            "Vegetarian", "Raggedy", "Gross", "Equestrian", "Infernal", "Mann Co.", "Aperture", "Dalek", "Misconfigured", "Malfunctioning", "Polite",
-            "A Distinctive Lack Of", "An extraordinary Abundance Of", "An extraordinary Lack Of", "A Distinctive Abundance Of"
-            ]
-        self.april_filters = sorted(self.april_filters)
 
 def deleteItem(id):
     Submissions.objects.filter(pk=id).delete()

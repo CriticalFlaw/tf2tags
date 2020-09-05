@@ -65,10 +65,12 @@ def main():
     print(str(datetime.now())[:19] + " I.   Download item schema from Valve")
 
     try:
+        print("Retrieving TF2 schema...")
         schema_fh = urllib.urlopen(SCHEMA_URL)
         schema_txt = schema_fh.read().decode("utf-8")
         schema = json.loads(schema_txt)["result"]
         output += "SCHEMA SIZE: " + str(round(len(schema_txt) / 1024.0, 2)) + " KB\n"
+        print("SCHEMA SIZE: " + str(round(len(schema_txt) / 1024.0, 2)) + " KB\n")
         success = True
     except Exception, e:
         errors += 1
@@ -86,6 +88,7 @@ def main():
     print(str(datetime.now())[:19] + " II.   Check for New Rarities")
     found_unknown = False
     for k in schema["qualityNames"]:
+        print(schema["qualityNames"][k])
         v = schema["qualityNames"][k]
         if v not in KNOWN_RARITIES:
             # Decorated Hotfix - TODO: Properly handle this
@@ -337,7 +340,7 @@ def main():
                 output += "WARNING: Could not retrieve image: " + str(fname) + " from " + str(url) + "\n"
                 warnings += 1
     output += "Downloaded " + str(dl_count) + " images.\n"
-
+    """
     ################################################################################
     output += "============================================================\n"
     output += "V. Handle Edge Cases\n".upper()
@@ -452,7 +455,7 @@ def main():
         elif case.strip() != "":
                 output += "WARNING: Unknown command given in edge_cases.dat: " + case + "\n"
                 warnings += 1
-
+    """
     ################################################################################
     output += "============================================================\n"
     output += "VI. Download Painted Images from tf2wiki\n".upper()
@@ -463,7 +466,7 @@ def main():
     missing_count = 0
 
     # Initialize the font for placeholder images
-    font = ImageFont.truetype("victor-pixel.ttf", 10)
+    font = ImageFont.truetype("/var/www/html/tf2tags/assets/fonts/victor-pixel.ttf", 10)
 
     for item in schema["items"]:
         break # DEBUG

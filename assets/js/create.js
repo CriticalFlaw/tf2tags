@@ -165,18 +165,8 @@ function classSelect(classname)
     finalClass = classname;
     console.log(finalClass);
     hidesteps();
-    
-    if (finalClass == "April")
-    {
-        $(".slot-token").hide();
-        $(".slot-token.april").show();
-    }
-    else
-    {
-        $(".slot-token").show();
-        $(".slot-token.april").hide();
-    }
-    
+	
+	$(".slot-token").show();
     $('#step2').show();
     $('#stepnum').html('Step Two');
     $('#stepdir').html('Choose the slot of the item you wish to name.');
