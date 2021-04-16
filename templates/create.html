@@ -1,6 +1,8 @@
 {% extends "main.html" %}
 
-{% block title %} - Create Item{% endblock %}
+{% block title %}
+ - Create Item
+ {% endblock %}
 
 {% block scripts %}
 <script src="/assets/js/tf2.js?v=20160805"></script>
@@ -30,7 +32,7 @@
 
     <div id="step2">
         {% for slot in tf.slots %}
-            <img src="/assets/images/create/{{slot}}.png" id="slot{{forloop.counter}}" slotname="{{slot}}" class="slot-token {% if forloop.counter >= 8%} april{%endif%}">
+            <img src="/assets/images/create/{{slot}}.png" id="slot{{forloop.counter}}" slotname="{{slot}}" class="slot-token">
         {% endfor %}
     </div>
     <div id="step3">

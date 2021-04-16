@@ -1,6 +1,6 @@
 // tf2.js - Lots of arrays - 2015-08-17
 
-var classes = ["Scout", "Soldier", "Pyro", "Demoman", "Heavy", "Engineer", "Medic", "Sniper", "Spy", "All", "April"];
+var classes = ["Scout", "Soldier", "Pyro", "Demoman", "Heavy", "Engineer", "Medic", "Sniper", "Spy", "All"];
 var slots = ["primary", "secondary", "melee", "pda", "pda2", "misc", "action"];
 
 var rarity_classes = {"Normal":"Normal", "Unique":"Unique", "Vintage":"Vintage", "Genuine":"Genuine", 

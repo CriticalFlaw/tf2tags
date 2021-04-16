@@ -61,7 +61,7 @@ def postNews(request, id=None):
             #Old
 
 
-    imagelist = glob.glob("/var/projects/tf2tags/assets/images/portraits/*.*")
+    imagelist = glob.glob("/var/www/html/tf2tags/assets/images/portraits/*.*")
     images = []
     for image in imagelist:
         images.append(os.path.split(image)[1])

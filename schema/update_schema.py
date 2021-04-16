@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import json, os, sys
-sys.path.append("/var/projects/tf2tags")
+sys.path.append("/var/www/html/tf2tags")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tags.settings")
 from schema.models import *
 from datetime import datetime

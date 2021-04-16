@@ -8,7 +8,6 @@ This script is to execute automatically and nightly to update the items on tf2ta
 NO OTHER FILES SHOULD BE NECESSARY INCLUDING THE SCHEMA APP OR UNUSUALSCHEMA SCRIPTS
 """
 import json, urllib, codecs, os
-import urllib.request
 from datetime import datetime
 from PIL import Image, ImageFont, ImageDraw
 import sys, smtplib
@@ -16,7 +15,7 @@ from sys import exit
 #from wikitools import wiki, api, page
 
 import django, codecs
-sys.path.append("/var/projects/tf2tags")
+sys.path.append("/var/www/html/tf2tags")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tags.settings")
 django.setup()
 from schema.models import *
@@ -24,11 +23,11 @@ from django.template import Template, Context
 from django.template.loader import get_template
 
 KEY             = "TODO"
-SCHEMA_URL      = "http://api.steampowered.com/IEconItems_440/GetSchema/v0001?key="+KEY+"&language=en"
+SCHEMA_URL      = "http://api.steampowered.com/IEconItems_440/GetSchemaItems/v0001?key="+KEY+"&language=en"
 TF2WIKI_API     = "https://wiki.teamfortress.com/w/api.php"
 RARITIES_URL    = "https://wiki.teamfortress.com/w/index.php?title=Template:Dictionary/quad&action=raw"
 SELF_MADE_URL   = "https://wiki.teamfortress.com/w/index.php?title=List_of_Self-Made_item_owners&action=raw"
-IMAGE_ROOT      = "/var/projects/tf2tags/assets/items/"
+IMAGE_ROOT      = "/var/www/html/tf2tags/assets/items/"
 
 KNOWN_RARITIES  = ["Normal", "Unique", "Haunted", "Vintage", "Genuine", "Strange", "Collector's", "Unusual", "Self-Made", "Community", "Valve", "Completed", "Customized", "rarity2", "rarity3"]
 ALL_CLASS_VALUE = "0"
@@ -66,19 +65,22 @@ def main():
     print(str(datetime.now())[:19] + " I.   Download item schema from Valve")
 
     try:
-        schema_fh = urllib.request.urlopen(SCHEMA_URL)
+        print("Retrieving TF2 schema...")
+        schema_fh = urllib.urlopen(SCHEMA_URL)
         schema_txt = schema_fh.read().decode("utf-8")
         schema = json.loads(schema_txt)["result"]
         output += "SCHEMA SIZE: " + str(round(len(schema_txt) / 1024.0, 2)) + " KB\n"
+        print("SCHEMA SIZE: " + str(round(len(schema_txt) / 1024.0, 2)) + " KB\n")
         success = True
-    except:
+    except Exception, e:
         errors += 1
         output += "ERROR: FAILED TO READ SCHEMA. ABORTING\n"
         success = False
 
     if not success:
         finish(output, errors, warnings)
-
+    
+    """
     ################################################################################
     output += "============================================================\n"
     output += "II.   Check for New Rarities\n".upper()
@@ -86,12 +88,12 @@ def main():
     print(str(datetime.now())[:19] + " II.   Check for New Rarities")
     found_unknown = False
     for k in schema["qualityNames"]:
+        print(schema["qualityNames"][k])
         v = schema["qualityNames"][k]
         if v not in KNOWN_RARITIES:
             # Decorated Hotfix - TODO: Properly handle this
             if v == "Decorated Weapon":
                 continue
-
             output += "WARNING: Found unknown rarity: " + v + "\n"
             found_unknown = True
             warnings += 1
@@ -99,7 +101,7 @@ def main():
         output += "No new rarities detected.\n"
 
     ################################################################################
-    """
+    
     output += "============================================================\n"
     output += "III.  Download rarities from tf2wiki\n".upper()
     output += "--------------------\n"
@@ -305,7 +307,7 @@ def main():
         key = name.lower()
         defindex = item["defindex"]
         slot = item.get("item_slot", "")
-
+        
         if slot in ["melee", "pda", "pda2", "primary", "secondary"]:
             item["rarities"] = {"Unique":True, "Haunted":True, "Vintage":True, "Genuine":True, "Strange":True, "Collector's":True, "Self-Made":True, "Community":True, "Valve":True}
         elif slot == "misc":
@@ -321,9 +323,9 @@ def main():
 
     dl_count = 0
     for item in schema["items"]:
-        break  # DEBUG
+        #break  # DEBUG
         defindex = item["defindex"]
-
+        
         # HOTFIX - MvM and Promos that will never have images
         if defindex in [1057, 1058, 1059, 1060, 1061, 1062, 1063, 1064, 1065, 1133, 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1154, 1159, 1160, 1161, 2128, 2132, 2133, 2134, 2136, 2137, 2141, 2142]:
             continue
@@ -332,13 +334,13 @@ def main():
         url = item["image_url"]
         if not os.path.isfile(IMAGE_ROOT + fname):
             try:
-                ret = urllib.request.urlretrieve(url, os.path.join(IMAGE_ROOT, fname))
+                ret = urllib.urlretrieve(url, os.path.join(IMAGE_ROOT, fname))
                 dl_count += 1
             except:
                 output += "WARNING: Could not retrieve image: " + str(fname) + " from " + str(url) + "\n"
                 warnings += 1
     output += "Downloaded " + str(dl_count) + " images.\n"
-
+    """
     ################################################################################
     output += "============================================================\n"
     output += "V. Handle Edge Cases\n".upper()
@@ -346,7 +348,7 @@ def main():
     print(str(datetime.now())[:19] + " V. Handle Edge Cases")
 
     try:
-        cases = open("/var/projects/tf2tags/tools/edge_cases.dat").readlines()
+        cases = open("/var/www/html/tf2tags/tools/edge_cases.dat").readlines()
     except:
         output += "ERROR: Could not read edge_cases.dat\n"
         finish(output, errors, warnings)
@@ -453,7 +455,7 @@ def main():
         elif case.strip() != "":
                 output += "WARNING: Unknown command given in edge_cases.dat: " + case + "\n"
                 warnings += 1
-
+    """
     ################################################################################
     output += "============================================================\n"
     output += "VI. Download Painted Images from tf2wiki\n".upper()
@@ -464,7 +466,7 @@ def main():
     missing_count = 0
 
     # Initialize the font for placeholder images
-    font = ImageFont.truetype("victor-pixel.ttf", 10)
+    font = ImageFont.truetype("/var/www/html/tf2tags/assets/fonts/victor-pixel.ttf", 10)
 
     for item in schema["items"]:
         break # DEBUG
@@ -486,7 +488,7 @@ def main():
 
             # Check that the folder for paints exists, if not, make it
             defindex = str(item["defindex"])
-            imagePath = os.path.join("/var/projects/tf2tags/assets/items", defindex)
+            imagePath = os.path.join("/var/www/html/tf2tags/assets/items", defindex)
             if not os.path.exists(imagePath):
                 os.mkdir(imagePath)
 
@@ -519,7 +521,7 @@ def main():
                 url = url.replace("?", "_") # Dangersque, Too? Fix
 
                 try:
-                    page = urllib.request.urlopen(url).read().decode("utf-8")
+                    page = urllib.urlopen(url).read().decode("utf-8")
                 except:
                     print("Could not read", url)
                     continue
@@ -533,7 +535,7 @@ def main():
                 # Download the image
                 url = "http://wiki.teamfortress.com" + page
                 try:
-                    urllib.request.urlretrieve(url, os.path.join(imagePath, paint + style + ".png"))
+                    urllib.urlretrieve(url, os.path.join(imagePath, paint + style + ".png"))
                     image = Image.open(os.path.join(imagePath, paint + style + ".png"))
                     placeholder = False
                 except:
@@ -680,12 +682,12 @@ def main():
     output += "--------------------\n"
     print(str(datetime.now())[:19] + " IX. Generate raw data HTML page")
 
-    template = get_template("/var/projects/tf2tags/templates/raw.html")
+    template = get_template("/var/www/html/tf2tags/templates/raw.html")
     data = {}
     data["items"] = Item.objects.filter(defindex__gte=1, nameable=True).order_by("defindex")
     c = Context(data)
     raw_data_page = template.render(c)
-    template = codecs.open("/var/projects/tf2tags/templates/data.html", "w", "utf-8")
+    template = codecs.open("/var/www/html/tf2tags/templates/data.html", "w", "utf-8")
     template.write(raw_data_page)
     template.close()
     output += "Wrote templates/data.html\n"
@@ -705,8 +707,8 @@ def finish(output, errors, warnings):
 
     try:
         SERVER  = "localhost"
-        FROM    = "TODO@tf2tags.com"
-        TO      = ["TODO"]
+        FROM    = "admin@tf2tags.com"
+        TO      = [""]
         SUBJ    = "tf2tags update - Warnings "+str(warnings)+", Errors " + str(errors)
         TEXT    = output.replace("{{end}}", end_time)
 
@@ -727,7 +729,7 @@ def finish(output, errors, warnings):
         print("tf2tags has been updated. Mail has NOT been sent. Output is being dumped to update_tf2tags_nomail.log")
 
 
-    file = codecs.open("/var/projects/tf2tags/tools/update_tf2tags_nomail.log", "w", "utf-8")
+    file = codecs.open("/var/www/html/tf2tags/tools/update_tf2tags_nomail.log", "w", "utf-8")
     file.write(SUBJ + "\n" + TEXT)
     file.close()
     exit()
